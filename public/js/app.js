@@ -11971,6 +11971,12 @@ var _vue2 = _interopRequireDefault(_vue);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+_vue2.default.transition('bounce', {
+	enterClass: 'zoomInDown',
+	leaveClass: 'zoomOutUp',
+	type: 'animation'
+});
+
 var Task = _vue2.default.extend({
 
 	props: {
@@ -11980,19 +11986,19 @@ var Task = _vue2.default.extend({
 		}
 	},
 
-	template: '\n\t\t<div class="ui card">\n\t    <div class="content">\n\t      <div class="header">Completed: {{ task.name }}</div>\n\t      <div class="meta">{{ task.created_at }}</div>\n\t    </div>\n\t    <button class="ui bottom green attached button" v-show="task.completed" @click="changeTaskStatus(task)">\n\t      <i class="check icon"></i>\n\t      <span>Done</span>\n\t    </button>\n\t    <button class="ui bottom grey attached button" v-show="!task.completed" @click="changeTaskStatus(task)">\n\t      <i class="remove icon"></i>\n\t      <span>Active</span>\n\t    </button>\n\t\t</div>',
+	template: '\n\t\t<div class="ui card animated" transition="bounce">\n\t    <div class="content">\n\t      <div class="header">Completed: {{ task.name }}</div>\n\t      <div class="meta">{{ task.created_at }}</div>\n\t    </div>\n\t    <button class="ui bottom green attached button" v-show="task.completed" @click="changeTaskStatus(task)">\n\t      <i class="check icon"></i>\n\t      <span>Done</span>\n\t    </button>\n\t    <button class="ui bottom grey attached button" v-show="!task.completed" @click="changeTaskStatus(task)">\n\t      <i class="remove icon"></i>\n\t      <span>Active</span>\n\t    </button>\n\t\t</div>',
 
 	methods: {
 		changeTaskStatus: function changeTaskStatus(task) {
 
 			task.completed = !task.completed;
 
+			console.log(task);
+
 			// Update state from the task
-			_vue2.default.resource.update({ task: task }).then(function (res) {
-				return console.log('Task status changed successfully!');
-			}).catch(function (err) {
-				return console.log(err);
-			});
+			// Vue.resource.update({ task })
+			// 						.then((res) => console.log('Task status changed successfully!'))
+			// 						.catch((err) => console.log(err));
 		}
 	}
 

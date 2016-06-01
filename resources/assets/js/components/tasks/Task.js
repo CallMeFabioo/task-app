@@ -1,5 +1,11 @@
 import Vue from 'vue';
 
+Vue.transition('bounce', {
+	enterClass: 'zoomInDown',
+  leaveClass: 'zoomOutUp',
+  type: 'animation'
+});
+
 const Task = Vue.extend({
 
 	props: {
@@ -10,7 +16,7 @@ const Task = Vue.extend({
 	},
 
 	template: `
-		<div class="ui card">
+		<div class="ui card animated" transition="bounce">
 	    <div class="content">
 	      <div class="header">Completed: {{ task.name }}</div>
 	      <div class="meta">{{ task.created_at }}</div>
@@ -31,10 +37,12 @@ const Task = Vue.extend({
 
 				task.completed = !task.completed;
 
+				console.log(task);
+
 				// Update state from the task
-				Vue.resource.update({ task })
-										.then((res) => console.log('Task status changed successfully!'))
-										.catch((err) => console.log(err));
+				// Vue.resource.update({ task })
+				// 						.then((res) => console.log('Task status changed successfully!'))
+				// 						.catch((err) => console.log(err));
 			},
 
 		}

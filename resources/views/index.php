@@ -25,6 +25,7 @@
   		<div class="ui stacked segment">
   			<Statistics :tasks="tasks"></Statistics>
 			</div>
+
   		<div class="ui stacked segment">
   			<filter-buttons :filter.sync="filter"></filter-buttons>
   		</div>
