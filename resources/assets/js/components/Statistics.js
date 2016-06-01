@@ -21,7 +21,8 @@ const Statistics = Vue.extend({
 		    <div class="value">{{ total }}</div>
 		    <div class="label">Tasks</div>
 		  </div>
-		</div>`,
+		</div>
+	`,
 
 	props: {
 		tasks: {

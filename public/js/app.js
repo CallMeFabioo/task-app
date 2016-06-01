@@ -11804,16 +11804,17 @@ var _FilterButtons = require('./components/FilterButtons');
 
 var _FilterButtons2 = _interopRequireDefault(_FilterButtons);
 
+var _Tasks = require('./components/tasks/Tasks');
+
+var _Tasks2 = _interopRequireDefault(_Tasks);
+
+var _Task = require('./components/tasks/Task');
+
+var _Task2 = _interopRequireDefault(_Task);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 _vue2.default.use(_vueResource2.default);
-
-_vue2.default.filter('filterByStatus', function (value, status) {
-	if (status === '') return value;
-	return value.filter(function (task) {
-		return task.completed === status;
-	});
-});
 
 new _vue2.default({
 	el: '#app',
@@ -11827,32 +11828,26 @@ new _vue2.default({
 	},
 
 
-	components: { Statistics: _Statistics2.default, FilterButtons: _FilterButtons2.default },
+	components: {
+		Statistics: _Statistics2.default,
+		FilterButtons: _FilterButtons2.default,
+		Tasks: _Tasks2.default,
+		Task: _Task2.default
+	},
 
 	init: function init() {
 		var _this = this;
 
-		this.resource = this.$resource('/tasks{/id}');
+		_vue2.default.resource = this.$resource('/tasks{/id}');
 
 		// Get all tasks
-		this.resource.get({}).then(function (res) {
+		_vue2.default.resource.get({}).then(function (res) {
 			return _this.tasks = res.data;
 		});
 	},
 
 
 	methods: {
-		changeTaskStatus: function changeTaskStatus(task) {
-
-			task.completed = !task.completed;
-
-			// Update state from the task
-			this.resource.update({ task: task }).then(function (res) {
-				return console.log('Task status changed successfully!');
-			}).catch(function (err) {
-				return console.log(err);
-			});
-		},
 		makeRequest: function makeRequest() {
 			var _this2 = this;
 
@@ -11871,7 +11866,7 @@ new _vue2.default({
 			var _this3 = this;
 
 			// Create a new task every 2 seconds.
-			this.resource.save({}).then(function (res) {
+			_vue2.default.resource.save({}).then(function (res) {
 				return _this3.tasks.unshift(res.data);
 			}).catch(function (err) {
 				return console.log(err);
@@ -11881,7 +11876,7 @@ new _vue2.default({
 
 });
 
-},{"./components/FilterButtons":5,"./components/Statistics":6,"vue":3,"vue-resource":2}],5:[function(require,module,exports){
+},{"./components/FilterButtons":5,"./components/Statistics":6,"./components/tasks/Task":7,"./components/tasks/Tasks":8,"vue":3,"vue-resource":2}],5:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -11902,7 +11897,7 @@ var FilterButtons = _vue2.default.extend({
 		}
 	},
 
-	template: '\n\t\t<div class="three ui buttons">\n\t\t  <button class="ui red button" @click="filter = false">Filter tasks active</button>\n\t\t  <button class="ui green button" @click="filter = true">Filter tasks completed</button>\n\t\t  <button class="ui grey button" @click="filter = \'\'">Show all tasks</button>\n\t\t</div>'
+	template: '\n\t\t<div class="three ui buttons">\n\t\t  <button class="ui red button" @click="filter = false">Filter tasks active</button>\n\t\t  <button class="ui green button" @click="filter = true">Filter tasks completed</button>\n\t\t  <button class="ui grey button" @click="filter = \'\'">Show all tasks</button>\n\t\t</div>\n\t'
 
 });
 
@@ -11938,7 +11933,7 @@ var filters = {
 };
 
 var Statistics = _vue2.default.extend({
-	template: '\n\t\t<div class="ui three statistics">\n\t\t  <div class="red statistic">\n\t\t    <div class="value">{{ active }}</div>\n\t\t    <div class="label">Active</div>\n\t\t  </div>\n\t\t  <div class="green statistic">\n\t\t    <div class="value">{{ completed }}</div>\n\t\t    <div class="label">Completed</div>\n\t\t  </div>\n\t\t  <div class="grey statistic">\n\t\t    <div class="value">{{ total }}</div>\n\t\t    <div class="label">Tasks</div>\n\t\t  </div>\n\t\t</div>',
+	template: '\n\t\t<div class="ui three statistics">\n\t\t  <div class="red statistic">\n\t\t    <div class="value">{{ active }}</div>\n\t\t    <div class="label">Active</div>\n\t\t  </div>\n\t\t  <div class="green statistic">\n\t\t    <div class="value">{{ completed }}</div>\n\t\t    <div class="label">Completed</div>\n\t\t  </div>\n\t\t  <div class="grey statistic">\n\t\t    <div class="value">{{ total }}</div>\n\t\t    <div class="label">Tasks</div>\n\t\t  </div>\n\t\t</div>\n\t',
 
 	props: {
 		tasks: {
@@ -11963,6 +11958,94 @@ var Statistics = _vue2.default.extend({
 
 exports.default = Statistics;
 
-},{"vue":3}]},{},[4]);
+},{"vue":3}],7:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _vue = require('vue');
+
+var _vue2 = _interopRequireDefault(_vue);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var Task = _vue2.default.extend({
+
+	props: {
+		task: {
+			type: Object,
+			required: true
+		}
+	},
+
+	template: '\n\t\t<div class="ui card">\n\t    <div class="content">\n\t      <div class="header">Completed: {{ task.name }}</div>\n\t      <div class="meta">{{ task.created_at }}</div>\n\t    </div>\n\t    <button class="ui bottom green attached button" v-show="task.completed" @click="changeTaskStatus(task)">\n\t      <i class="check icon"></i>\n\t      <span>Done</span>\n\t    </button>\n\t    <button class="ui bottom grey attached button" v-show="!task.completed" @click="changeTaskStatus(task)">\n\t      <i class="remove icon"></i>\n\t      <span>Active</span>\n\t    </button>\n\t\t</div>',
+
+	methods: {
+		changeTaskStatus: function changeTaskStatus(task) {
+
+			task.completed = !task.completed;
+
+			// Update state from the task
+			_vue2.default.resource.update({ task: task }).then(function (res) {
+				return console.log('Task status changed successfully!');
+			}).catch(function (err) {
+				return console.log(err);
+			});
+		}
+	}
+
+});
+
+exports.default = Task;
+
+},{"vue":3}],8:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _vue = require('vue');
+
+var _vue2 = _interopRequireDefault(_vue);
+
+var _Task = require('./Task');
+
+var _Task2 = _interopRequireDefault(_Task);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+_vue2.default.filter('filterByStatus', function (value, status) {
+	if (status === '') return value;
+	return value.filter(function (task) {
+		return task.completed === status;
+	});
+});
+
+var Tasks = _vue2.default.extend({
+
+	components: { Task: _Task2.default },
+
+	props: {
+		tasks: {
+			type: Array,
+			required: true
+		},
+
+		filter: {
+			type: [String, Boolean],
+			required: true
+		}
+	},
+
+	template: '\n\t\t<div class="ui four cards stackable">\n\t\t\t<Task :task.sync="task" v-for="task in tasks | filterByStatus filter" track-by="id"></Task>\n\t\t</div>\n\t'
+
+});
+
+exports.default = Tasks;
+
+},{"./Task":7,"vue":3}]},{},[4]);
 
 //# sourceMappingURL=app.js.map

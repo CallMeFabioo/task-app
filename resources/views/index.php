@@ -19,32 +19,18 @@
 
   <div id="app">
   	<div class="ui container">
+
 			<button class="massive blue fluid ui button" :class="{ loading: creatingTask, teal: creatingTask }" @click="makeRequest">Create task</button>
+
   		<div class="ui stacked segment">
-  			<statistics :tasks="tasks"></statistics>
+  			<Statistics :tasks="tasks"></Statistics>
 			</div>
   		<div class="ui stacked segment">
   			<filter-buttons :filter.sync="filter"></filter-buttons>
   		</div>
-  		<div class="ui stacked segment">
-  			<div class="ui four cards stackable">
-					<div class="ui card" v-for="task in tasks | filterByStatus filter" track-by="id">
-					    <div class="content">
-					      <div class="header">Completed: {{ task.name }}</div>
-					      <div class="meta">{{ task.created_at }}</div>
-					    </div>
-					    <button class="ui bottom green attached button" v-show="task.completed" @click="changeTaskStatus(task)">
-					      <i class="check icon"></i>
-					      <span>Done</span>
-					    </button>
-					    <button class="ui bottom grey attached button" v-show="!task.completed" @click="changeTaskStatus(task)">
-					      <i class="remove icon"></i>
-					      <span>Active</span>
-					    </button>
-					  </div>
-					</div>
-				</div>
-  		</div>
+
+  		<Tasks :tasks="tasks" :filter.sync="filter"></Tasks>
+
   	</div>
   </div>
 
