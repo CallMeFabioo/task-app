@@ -11796,6 +11796,10 @@ var _vueResource = require('vue-resource');
 
 var _vueResource2 = _interopRequireDefault(_vueResource);
 
+var _Statistics = require('./components/Statistics');
+
+var _Statistics2 = _interopRequireDefault(_Statistics);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 _vue2.default.use(_vueResource2.default);
@@ -11807,22 +11811,6 @@ _vue2.default.filter('filterByStatus', function (value, status) {
 	});
 });
 
-var filters = {
-	all: function all(tasks) {
-		return tasks;
-	},
-	active: function active(tasks) {
-		return tasks.filter(function (task) {
-			return !task.completed;
-		});
-	},
-	completed: function completed(tasks) {
-		return tasks.filter(function (task) {
-			return task.completed;
-		});
-	}
-};
-
 new _vue2.default({
 	el: '#app',
 
@@ -11833,6 +11821,10 @@ new _vue2.default({
 			creatingTask: false
 		};
 	},
+
+
+	components: { Statistics: _Statistics2.default },
+
 	init: function init() {
 		var _this = this;
 
@@ -11841,18 +11833,6 @@ new _vue2.default({
 		});
 	},
 
-
-	computed: {
-		total: function total() {
-			return filters.all(this.tasks).length;
-		},
-		active: function active() {
-			return filters.active(this.tasks).length;
-		},
-		completed: function completed() {
-			return filters.completed(this.tasks).length;
-		}
-	},
 
 	methods: {
 		changeTaskStatus: function changeTaskStatus(task) {
@@ -11880,6 +11860,56 @@ new _vue2.default({
 
 });
 
-},{"vue":3,"vue-resource":2}]},{},[4]);
+},{"./components/Statistics":5,"vue":3,"vue-resource":2}],5:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _vue = require('vue');
+
+var _vue2 = _interopRequireDefault(_vue);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var filters = {
+	all: function all(tasks) {
+		return tasks;
+	},
+	active: function active(tasks) {
+		return tasks.filter(function (task) {
+			return !task.completed;
+		});
+	},
+	completed: function completed(tasks) {
+		return tasks.filter(function (task) {
+			return task.completed;
+		});
+	}
+};
+
+var Statistics = _vue2.default.extend({
+	template: '\n\t\t<div class="ui three statistics">\n\t\t  <div class="red statistic">\n\t\t    <div class="value">{{ active }}</div>\n\t\t    <div class="label">Active</div>\n\t\t  </div>\n\t\t  <div class="green statistic">\n\t\t    <div class="value">{{ completed }}</div>\n\t\t    <div class="label">Completed</div>\n\t\t  </div>\n\t\t  <div class="grey statistic">\n\t\t    <div class="value">{{ total }}</div>\n\t\t    <div class="label">Tasks</div>\n\t\t  </div>\n\t\t</div>',
+
+	props: ['tasks'],
+
+	computed: {
+		total: function total() {
+			return filters.all(this.tasks).length;
+		},
+		active: function active() {
+			return filters.active(this.tasks).length;
+		},
+		completed: function completed() {
+			return filters.completed(this.tasks).length;
+		}
+	}
+
+});
+
+exports.default = Statistics;
+
+},{"vue":3}]},{},[4]);
 
 //# sourceMappingURL=app.js.map

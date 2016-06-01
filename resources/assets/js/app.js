@@ -3,18 +3,14 @@
 import Vue from 'vue';
 import VueResource from 'vue-resource';
 
+import Statistics from './components/Statistics';
+
 Vue.use(VueResource);
 
 Vue.filter('filterByStatus', (value, status) => {
 	if(status === '') return value;
   return value.filter((task) => task.completed === status);
-})
-
-const filters = {
-	all: (tasks) => tasks,
-	active: (tasks) => tasks.filter((task) => !task.completed),
-	completed: (tasks) => tasks.filter((task) => task.completed)
-};
+});
 
 new Vue({
 	el: '#app',
@@ -27,24 +23,10 @@ new Vue({
 		}
 	},
 
+	components: { Statistics },
+
 	init() {
 		this.$http.get('/tasks').then((res) => this.tasks = res.data);
-	},
-
-	computed: {
-
-		total() {
-			return filters.all(this.tasks).length;
-		},
-
-		active() {
-			return filters.active(this.tasks).length;
-		},
-
-		completed() {
-			return filters.completed(this.tasks).length;
-		}
-
 	},
 
 	methods: {

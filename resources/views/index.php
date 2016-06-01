@@ -21,20 +21,7 @@
   	<div class="ui container">
 			<button class="massive blue fluid ui button" :class="{ loading: creatingTask, teal: creatingTask }" @click="createTask">Create task</button>
   		<div class="ui stacked segment">
-  			<div class="ui three statistics">
-				  <div class="red statistic">
-				    <div class="value">{{ active }}</div>
-				    <div class="label">Active</div>
-				  </div>
-				  <div class="green statistic">
-				    <div class="value">{{ completed }}</div>
-				    <div class="label">Completed</div>
-				  </div>
-				  <div class="grey statistic">
-				    <div class="value">{{ total }}</div>
-				    <div class="label">Tasks</div>
-				  </div>
-				</div>
+  			<statistics :tasks="tasks"></statistics>
 			</div>
   		<div class="ui stacked segment">
   			<div class="three ui buttons">
