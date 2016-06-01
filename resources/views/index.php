@@ -24,11 +24,7 @@
   			<statistics :tasks="tasks"></statistics>
 			</div>
   		<div class="ui stacked segment">
-  			<div class="three ui buttons">
-				  <button class="ui red button" @click="filter = false">Filter tasks active</button>
-				  <button class="ui green button" @click="filter = true">Filter tasks completed</button>
-				  <button class="ui grey button" @click="filter = ''">Show all tasks</button>
-				</div>
+  			<filter-buttons :filter.sync="filter"></filter-buttons>
   		</div>
   		<div class="ui stacked segment">
   			<div class="ui four cards stackable">

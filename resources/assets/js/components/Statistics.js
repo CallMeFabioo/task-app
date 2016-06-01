@@ -23,7 +23,12 @@ const Statistics = Vue.extend({
 		  </div>
 		</div>`,
 
-	props: ['tasks'],
+	props: {
+		tasks: {
+			type: Array,
+			required: true
+		}
+	},
 
 	computed: {
 

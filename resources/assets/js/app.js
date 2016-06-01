@@ -4,6 +4,7 @@ import Vue from 'vue';
 import VueResource from 'vue-resource';
 
 import Statistics from './components/Statistics';
+import FilterButtons from './components/FilterButtons';
 
 Vue.use(VueResource);
 
@@ -23,7 +24,7 @@ new Vue({
 		}
 	},
 
-	components: { Statistics },
+	components: { Statistics, FilterButtons },
 
 	init() {
 		this.resource = this.$resource('/tasks{/id}');
@@ -40,7 +41,7 @@ new Vue({
 
 			// Update state from the task
 			this.resource.update({ task })
-									.then((res) => console.log(res.data))
+									.then((res) => console.log('Task status changed successfully!'))
 									.catch((err) => console.log(err));
 		},
 

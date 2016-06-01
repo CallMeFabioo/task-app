@@ -11800,6 +11800,10 @@ var _Statistics = require('./components/Statistics');
 
 var _Statistics2 = _interopRequireDefault(_Statistics);
 
+var _FilterButtons = require('./components/FilterButtons');
+
+var _FilterButtons2 = _interopRequireDefault(_FilterButtons);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 _vue2.default.use(_vueResource2.default);
@@ -11823,7 +11827,7 @@ new _vue2.default({
 	},
 
 
-	components: { Statistics: _Statistics2.default },
+	components: { Statistics: _Statistics2.default, FilterButtons: _FilterButtons2.default },
 
 	init: function init() {
 		var _this = this;
@@ -11844,7 +11848,7 @@ new _vue2.default({
 
 			// Update state from the task
 			this.resource.update({ task: task }).then(function (res) {
-				return console.log(res.data);
+				return console.log('Task status changed successfully!');
 			}).catch(function (err) {
 				return console.log(err);
 			});
@@ -11877,7 +11881,34 @@ new _vue2.default({
 
 });
 
-},{"./components/Statistics":5,"vue":3,"vue-resource":2}],5:[function(require,module,exports){
+},{"./components/FilterButtons":5,"./components/Statistics":6,"vue":3,"vue-resource":2}],5:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _vue = require('vue');
+
+var _vue2 = _interopRequireDefault(_vue);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var FilterButtons = _vue2.default.extend({
+	props: {
+		filter: {
+			type: [String, Boolean],
+			default: ''
+		}
+	},
+
+	template: '\n\t\t<div class="three ui buttons">\n\t\t  <button class="ui red button" @click="filter = false">Filter tasks active</button>\n\t\t  <button class="ui green button" @click="filter = true">Filter tasks completed</button>\n\t\t  <button class="ui grey button" @click="filter = \'\'">Show all tasks</button>\n\t\t</div>'
+
+});
+
+exports.default = FilterButtons;
+
+},{"vue":3}],6:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -11909,7 +11940,12 @@ var filters = {
 var Statistics = _vue2.default.extend({
 	template: '\n\t\t<div class="ui three statistics">\n\t\t  <div class="red statistic">\n\t\t    <div class="value">{{ active }}</div>\n\t\t    <div class="label">Active</div>\n\t\t  </div>\n\t\t  <div class="green statistic">\n\t\t    <div class="value">{{ completed }}</div>\n\t\t    <div class="label">Completed</div>\n\t\t  </div>\n\t\t  <div class="grey statistic">\n\t\t    <div class="value">{{ total }}</div>\n\t\t    <div class="label">Tasks</div>\n\t\t  </div>\n\t\t</div>',
 
-	props: ['tasks'],
+	props: {
+		tasks: {
+			type: Array,
+			required: true
+		}
+	},
 
 	computed: {
 		total: function total() {
