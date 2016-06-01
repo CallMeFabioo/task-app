@@ -11828,7 +11828,10 @@ new _vue2.default({
 	init: function init() {
 		var _this = this;
 
-		this.$http.get('/tasks').then(function (res) {
+		this.resource = this.$resource('/tasks{/id}');
+
+		// Get all tasks
+		this.resource.get({}).then(function (res) {
 			return _this.tasks = res.data;
 		});
 	},
@@ -11836,25 +11839,39 @@ new _vue2.default({
 
 	methods: {
 		changeTaskStatus: function changeTaskStatus(task) {
+
 			task.completed = !task.completed;
-			this.$http.patch('/tasks', { task: task }).then(function (res) {
+
+			// Update state from the task
+			this.resource.update({ task: task }).then(function (res) {
 				return console.log(res.data);
+			}).catch(function (err) {
+				return console.log(err);
 			});
 		},
-		createTask: function createTask() {
+		makeRequest: function makeRequest() {
 			var _this2 = this;
 
 			this.creatingTask = true;
+
 			var interval = setInterval(function () {
-				_this2.$http.post('/tasks').then(function (res) {
-					return _this2.tasks.unshift(res.data);
-				});
+				return _this2.createTask();
 			}, 2000);
 
 			setTimeout(function () {
 				_this2.creatingTask = false;
 				clearInterval(interval);
 			}, 10000);
+		},
+		createTask: function createTask() {
+			var _this3 = this;
+
+			// Create a new task every 2 seconds.
+			this.resource.save({}).then(function (res) {
+				return _this3.tasks.unshift(res.data);
+			}).catch(function (err) {
+				return console.log(err);
+			});
 		}
 	}
 

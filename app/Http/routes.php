@@ -15,6 +15,6 @@ $app->get('/', function () use ($app) {
   return view('index');
 });
 
-$app->get('/tasks', [ 'uses' => 'TasksController@index' ]);
-$app->post('/tasks', [ 'uses' => 'TasksController@store' ]);
-$app->patch('/tasks', [ 'uses' => 'TasksController@update' ]);
+$app->get('/tasks', 	[ 'uses' => 'TasksController@index' ]);
+$app->post('/tasks', 	[ 'uses' => 'TasksController@store' ]);
+$app->put('/tasks', 	[ 'uses' => 'TasksController@update' ]);

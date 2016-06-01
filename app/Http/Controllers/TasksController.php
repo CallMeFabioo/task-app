@@ -19,7 +19,7 @@ class TasksController extends Controller
 
 	public function index()
 	{
-		return Task::query()->take(100)->get();
+		return Task::query()->get();
 	}
 
 	public function store()

@@ -19,7 +19,7 @@
 
   <div id="app">
   	<div class="ui container">
-			<button class="massive blue fluid ui button" :class="{ loading: creatingTask, teal: creatingTask }" @click="createTask">Create task</button>
+			<button class="massive blue fluid ui button" :class="{ loading: creatingTask, teal: creatingTask }" @click="makeRequest">Create task</button>
   		<div class="ui stacked segment">
   			<statistics :tasks="tasks"></statistics>
 			</div>

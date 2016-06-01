@@ -26,26 +26,41 @@ new Vue({
 	components: { Statistics },
 
 	init() {
-		this.$http.get('/tasks').then((res) => this.tasks = res.data);
+		this.resource = this.$resource('/tasks{/id}');
+
+		// Get all tasks
+		this.resource.get({}).then((res) => this.tasks = res.data);
 	},
 
 	methods: {
 
 		changeTaskStatus(task) {
+
 			task.completed = !task.completed;
-			this.$http.patch('/tasks', { task }).then((res) => console.log(res.data));
+
+			// Update state from the task
+			this.resource.update({ task })
+									.then((res) => console.log(res.data))
+									.catch((err) => console.log(err));
 		},
 
-		createTask() {
+		makeRequest() {
 			this.creatingTask = true;
-			let interval = setInterval(() => {
-				this.$http.post('/tasks').then((res) => this.tasks.unshift(res.data));
-			}, 2000);
+
+			let interval = setInterval(() => this.createTask(), 2000);
 
 			setTimeout(() => {
 				this.creatingTask = false;
 				clearInterval(interval);
 			}, 10000);
+
+		},
+
+		createTask() {
+			// Create a new task every 2 seconds.
+			this.resource.save({})
+									.then((res) => this.tasks.unshift(res.data))
+									.catch((err) => console.log(err));
 		}
 
 
