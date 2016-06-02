@@ -1,3 +1,5 @@
+'use strict';
+
 import Vue from 'vue';
 
 import Task from './Task';
@@ -10,6 +12,12 @@ Vue.filter('filterByStatus', (value, status) => {
 const Tasks = Vue.extend({
 
 	components: { Task },
+
+	init() {
+		this.$on('task-removed', (task) => {
+		  this.tasks.$remove(task);
+		});
+	},
 
 	props: {
 		tasks: {
